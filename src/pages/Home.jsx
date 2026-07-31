@@ -231,7 +231,7 @@ function HeroVisual() {
           <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#febc2e' }} />
           <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c840' }} />
           <span style={{ marginLeft: 10, fontSize: 11, color: 'var(--text-dim)', letterSpacing: '0.04em' }}>
-            wroche@nyu: ~
+            willroche@nyu: ~
           </span>
         </div>
 
