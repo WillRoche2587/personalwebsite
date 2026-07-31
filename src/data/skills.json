@@ -1,0 +1,24 @@
+{
+  "categories": [
+    {
+      "name": "Languages",
+      "icon": "Code2",
+      "skills": ["Python", "C++", "C", "Java", "SQL", "JavaScript", "TypeScript", "PHP", "Ruby"]
+    },
+    {
+      "name": "Frameworks & Libraries",
+      "icon": "Layers",
+      "skills": ["React", "Next.js", "Node.js", "FastAPI", "Spring Boot", "Pandas", "NumPy", "Tailwind CSS"]
+    },
+    {
+      "name": "Data & Infrastructure",
+      "icon": "Database",
+      "skills": ["PostgreSQL", "MySQL", "Supabase", "Docker", "REST APIs", "Alteryx", "Vercel", "Render"]
+    },
+    {
+      "name": "Ways of Working",
+      "icon": "Terminal",
+      "skills": ["Git", "CI/CD", "Agile", "Jira", "Linux", "Unit Testing"]
+    }
+  ]
+}

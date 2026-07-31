@@ -1,0 +1,14 @@
+{
+  "intro": "The things I spend my non-compiling hours on. A few of these overlap with the code more than you'd expect — the tax engine started because I wanted to know what I actually owed.",
+  "items": [
+    { "name": "Cooking", "icon": "ChefHat", "note": "Sunday is for something that takes four hours." },
+    { "name": "Freshwater Fishing", "icon": "Fish", "note": "Largemouth bass, mostly. Patience as a hobby." },
+    { "name": "Hiking", "icon": "Mountain", "note": "Anything with elevation and no cell service." },
+    { "name": "Lord of the Rings", "icon": "Swords", "note": "Extended editions. It's not a debate." },
+    { "name": "Minecraft", "icon": "Boxes", "note": "Redstone is just embedded systems with more zombies." },
+    { "name": "Shrimpkeeping", "icon": "Waves", "note": "A planted tank is a control system you can watch." },
+    { "name": "Soccer", "icon": "Goal", "note": "Still playing, still arguing about the offside rule." },
+    { "name": "Stock Trading", "icon": "TrendingUp", "note": "Where a lot of my project ideas come from." },
+    { "name": "Weightlifting", "icon": "Dumbbell", "note": "Progressive overload is a good mental model for most things." }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "featured": [
+    {
+      "title": "TCNJ Library App",
+      "ticker": "TCNJ",
+      "period": "Sept 2023 – May 2024",
+      "context": "Software Engineering Internship",
+      "tools": ["PHP", "MySQL", "JavaScript", "Raspberry Pi", "PWA"],
+      "description": "A cross-platform progressive web app that made campus resources findable for 7,000+ students, backed by live occupancy data from motion sensors.",
+      "papers": [
+        { "label": "Progress Report", "url": "/papers/tcnj-pwa-report.pdf" }
+      ],
+      "detail": {
+        "overview": "The TCNJ library had the resources students needed and no good way to find them. I extended the existing library app into a cross-platform PWA that surfaces study rooms, printers, and computers in one place — and then wired it to real hardware so the availability shown was actually true. Motion sensors on Raspberry Pis reported room occupancy into a MySQL database that the app read from, replacing a guess with a measurement.",
+        "highlights": [
+          "Served 7,000+ students across the TCNJ campus",
+          "Study room, printer, and computer finder in a single interface",
+          "Tracked live availability across 27 study rooms",
+          "Raspberry Pi motion sensors feeding occupancy into MySQL",
+          "Real-time maintenance monitoring so dead sensors surfaced instead of silently reporting empty",
+          "Installable PWA — worked on phones without an app store round trip"
+        ],
+        "role": "Full-stack development and hardware integration — built the PWA frontend, the MySQL/PHP data layer, and the sensor ingestion path."
+      }
+    },
+    {
+      "title": "Live Stock Tracker",
+      "ticker": "TICK",
+      "period": "Dec 2024",
+      "context": "Personal Project",
+      "tools": ["Python", "FastAPI", "WebSockets", "Chart.js", "Docker"],
+      "description": "A real-time market tracker that streams quotes over WebSockets and charts them across four timeframes.",
+      "link": "https://stocktracker-z7er.onrender.com",
+      "detail": {
+        "overview": "A live price tracker built around a FastAPI backend that pushes updates over WebSockets instead of making the client poll. It handles the unglamorous parts of market data too — knowing when the market is actually open, and rendering the same instrument across four different time horizons without refetching everything.",
+        "highlights": [
+          "FastAPI backend streaming quotes over WebSocket connections",
+          "1D / 1W / 1M / 1Y timeframe analysis on the same instrument",
+          "Automated market status monitoring for open, closed, and pre/post sessions",
+          "Interactive price visualizations rendered with Chart.js",
+          "Containerized with Docker for reproducible deployment"
+        ],
+        "role": "Built end to end — backend streaming layer, market session logic, frontend charting, and deployment."
+      }
+    },
+    {
+      "title": "Custom Linux Shell",
+      "ticker": "SHLL",
+      "period": "Feb 2025",
+      "context": "Operating Systems",
+      "tools": ["C", "POSIX", "System Calls", "IPC"],
+      "description": "A Unix-like shell written in C supporting command history, piping, I/O redirection, and background execution.",
+      "link": "https://github.com/WillRoche2587/linuxShell",
+      "detail": {
+        "overview": "A shell built from the system calls up. It parses a command line, forks, wires up file descriptors, and gets out of the way — which sounds simple until you handle a three-stage pipe with a redirect on the tail. Writing this is the fastest way I know to stop treating the shell as magic.",
+        "highlights": [
+          "Piping across chained commands with correct file descriptor handoff",
+          "Input and output redirection",
+          "Command history buffer with navigation",
+          "Background execution and built-ins including cd and exit",
+          "Process, directory, and IPC management via fork, execvp, pipe, and chdir",
+          "Runs standard Linux commands through PATH resolution"
+        ],
+        "role": "Sole author — parser, process management, IPC, and built-in command implementations."
+      }
+    },
+    {
+      "title": "Songify",
+      "ticker": "SONG",
+      "period": "May 2025",
+      "context": "Personal Project",
+      "tools": ["Next.js", "React", "Cohere API", "TMDB API", "Tailwind CSS"],
+      "description": "An AI-powered song recommendation platform that turns a prompt into a playlist.",
+      "link": "https://songify-wjr.vercel.app",
+      "detail": {
+        "overview": "Songify takes what you're in the mood for and returns music that fits, using the Cohere API to do the interpretation. It was my first real exercise in designing around a language model rather than bolting one on — the interesting work is in the prompt boundary and in what you do when the model returns something unusable.",
+        "highlights": [
+          "Cohere API for recommendation generation from natural language input",
+          "TMDB API integration for supplementary media context",
+          "REST API design across the Next.js route layer",
+          "Styled with Tailwind CSS",
+          "Deployed on Vercel"
+        ],
+        "role": "Built end to end — frontend, API routes, model integration, and deployment."
+      }
+    },
+    {
+      "title": "Gainsight",
+      "ticker": "GAIN",
+      "period": "2025",
+      "context": "Portfolio Tax Tracker",
+      "tools": ["Java", "Spring Boot", "React", "PostgreSQL", "Groq API", "JUnit"],
+      "description": "A portfolio tax tracker with a FIFO cost-basis engine, wash sale detection, and short/long-term liability estimation.",
+      "detail": {
+        "overview": "Gainsight answers a question brokerages make surprisingly hard: what do I actually owe? It implements a FIFO cost-basis engine that matches sales against lots in order, detects wash sales, and — importantly — doesn't just flag the disallowed loss but rolls it forward into the replacement lot's basis, which is where most naive implementations get it wrong. The output is a short-term and long-term liability estimate you can trust enough to plan against.",
+        "highlights": [
+          "FIFO cost-basis engine matching dispositions against lots in acquisition order",
+          "Wash sale detection that rolls disallowed losses forward into the replacement basis",
+          "Short-term and long-term tax liability estimation",
+          "5 custom exception classes mapped to HTTP status codes through a global handler",
+          "JUnit test suite covering the engine's edge cases",
+          "Spring Boot and PostgreSQL backend behind a React frontend",
+          "Groq API integration for natural-language explanation of results"
+        ],
+        "role": "Backend architecture and tax logic — the FIFO engine, wash sale rules, exception design, and test suite."
+      }
+    },
+    {
+      "title": "LemonLink",
+      "ticker": "LMNK",
+      "period": "2026",
+      "context": "Morgan Stanley Code to Give",
+      "tools": ["Next.js", "FastAPI", "Supabase", "PostgreSQL", "Mapbox GL"],
+      "description": "A volunteer management platform built for a nonprofit, with an admin analytics dashboard and a context-aware AI assistant.",
+      "detail": {
+        "overview": "Built at Morgan Stanley's Code to Give 2026 for a nonprofit that needed to understand its own volunteer base. I built the admin side — the analytics dashboard that turns raw signups into a picture of who shows up and to what — plus an AI support assistant that answers using the asking user's actual profile and event history instead of generic help text.",
+        "highlights": [
+          "Admin analytics dashboard tracking volunteer activity, event participation, and platform-wide engagement",
+          "Context-aware AI assistant personalizing responses from each user's profile and event data",
+          "Next.js frontend against a FastAPI backend",
+          "Supabase (PostgreSQL) for persistence and auth",
+          "Mapbox GL for geographic event discovery"
+        ],
+        "role": "Admin dashboard and AI assistant — analytics queries, dashboard UI, and the assistant's context pipeline."
+      }
+    },
+    {
+      "title": "RiskRadar",
+      "ticker": "RSKR",
+      "period": "2026",
+      "context": "CMU TartanHacks",
+      "tools": ["Python", "Pandas", "NumPy", "BeautifulSoup4", "Dedalus MCP", "React", "TypeScript", "Node.js"],
+      "description": "An internal risk assessment tool for banks that profiles loan applicants from public records and social media.",
+      "detail": {
+        "overview": "RiskRadar gives a credit team the picture of an applicant that exists in public but nobody has time to assemble. The hard part wasn't the analysis — it was throughput. A naive scraper covering this many sources takes hours; we parallelized collection into six async waves so the whole profile lands inside a coffee break.",
+        "highlights": [
+          "Gathered data from 400+ platforms in 15 minutes",
+          "Parallelized OSINT pipeline running across 6 async waves",
+          "Public records and social media synthesized into a single applicant profile",
+          "Pandas and NumPy analysis over BeautifulSoup4 collection",
+          "Dedalus MCP for tool orchestration",
+          "React and TypeScript frontend over a Node.js service layer",
+          "Built at CMU TartanHacks 2026"
+        ],
+        "role": "Data pipeline and analysis — the parallelized collection architecture and the profiling logic on top of it."
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "William Roche",
+  "initials": "WR",
+  "roles": [
+    "software engineer",
+    "cs student at nyu",
+    "markets nerd",
+    "systems tinkerer"
+  ],
+  "tagline": "Computer Science @ NYU",
+  "heroText": "I'm a CS student at NYU with a math minor, currently writing software for the front office at Natixis. I like problems that sit where clean abstractions meet messy reality — reconciliation pipelines, tax engines, shells, and the occasional superconducting junction.",
+  "aboutText": "I'm a junior at NYU studying Computer Science with a minor in Mathematics, after transferring from The College of New Jersey. Most of what I build lives somewhere between finance and systems: FIFO tax engines, real-time market data, ETL pipelines that have to be right the first time. Before that I spent a summer in a quantum hardware lab fabricating graphene Josephson junctions, which taught me more about patience than any codebase has.",
+  "location": "New York, NY",
+  "email": "wroche2587@gmail.com",
+  "schoolEmail": "WillRoche@nyu.edu",
+  "phone": "(201) 819-8495",
+  "phoneHref": "tel:+12018198495",
+  "resumeUrl": "/resume.pdf",
+  "formspreeEndpoint": "https://formspree.io/f/movejozj",
+  "socials": {
+    "github": "https://github.com/WillRoche2587",
+    "linkedin": "https://www.linkedin.com/in/williamjroche/",
+    "email": "mailto:wroche2587@gmail.com"
+  },
+  "copyright": "2026 William Roche. All rights reserved."
+}

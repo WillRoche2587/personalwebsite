@@ -1,0 +1,81 @@
+{
+  "education": [
+    {
+      "institution": "New York University",
+      "degree": "B.S. Computer Science, Minor in Mathematics",
+      "date": "Sept 2025 – May 2027",
+      "location": "New York, NY",
+      "notes": ["GPA 3.946", "Dean's List"]
+    },
+    {
+      "institution": "The College of New Jersey",
+      "degree": "Computer Science, Minor in Mathematics",
+      "date": "Sept 2023 – May 2025",
+      "location": "Ewing, NJ",
+      "notes": ["GPA 3.92", "Dean's List", "Upsilon Pi Epsilon"]
+    }
+  ],
+  "work": [
+    {
+      "title": "Software Engineering Intern",
+      "company": "Natixis CIB",
+      "date": "June 2026 – Present",
+      "location": "New York, NY",
+      "highlights": [
+        "Automated a previously manual quarterly MPID reconciliation between internal systems and external FINRA/NASDAQ data",
+        "Built a Levenshtein-based name matching ETL pipeline that flagged gaps in ~7% of records for compliance remediation"
+      ]
+    },
+    {
+      "title": "Quantum Hardware Research Intern",
+      "company": "NYU CQIP",
+      "date": "June 2025 – Aug 2025",
+      "location": "New York, NY",
+      "highlights": [
+        "Fabricated a vertical graphene Josephson junction enabling ballistic supercurrent transport across a ~0.4nm channel",
+        "Engineered channel geometry around graphene's coherence length, since Cooper pairs decouple beyond a monolayer",
+        "Used photolithography, sputtering, and PDMS transfer; characterized with AFM and cryogenic resistance measurement"
+      ]
+    },
+    {
+      "title": "Social Media Creator & Growth Consultant",
+      "company": "Freelance",
+      "date": "Jan 2024 – May 2025",
+      "location": "Remote",
+      "highlights": [
+        "Grew a personal brand to 3M+ views, 22K followers, and $25,000 in revenue through algorithm-driven growth strategies",
+        "Mentored 7 small-scale creators on TikTok Live, driving a 38% average revenue increase through heightened viewership"
+      ]
+    },
+    {
+      "title": "Software Engineering Intern",
+      "company": "The College of New Jersey",
+      "date": "Sept 2023 – May 2024",
+      "location": "Ewing, NJ",
+      "highlights": [
+        "Produced a cross-platform PWA improving campus resource access for 7,000+ students by extending the TCNJ Library App",
+        "Tracked availability of 27 study rooms via MySQL/PHP and motion sensor data"
+      ]
+    }
+  ],
+  "coursework": {
+    "Computer Science": [
+      "Algorithms",
+      "Operating Systems",
+      "Computer Architecture",
+      "Data Structures",
+      "Databases",
+      "Software Engineering",
+      "Machine Learning",
+      "Object Oriented Programming"
+    ],
+    "Mathematics": [
+      "Probability and Statistics",
+      "Linear Algebra",
+      "Topics in Linear Algebra",
+      "Discrete Structures",
+      "Number Theory",
+      "Calculus A & B"
+    ]
+  }
+}
