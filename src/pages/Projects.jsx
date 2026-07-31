@@ -141,18 +141,22 @@ function Candle({ point, isSelected, isHovered, onSelect, onHover, onLeave }) {
         rx="2"
         stroke={color}
         strokeWidth="1.5"
-        initial={{ opacity: 0, y: yTop + 16 }}
+        initial={{ opacity: 0, scaleY: 0 }}
         animate={{
           opacity: 1,
-          y: yTop,
+          scaleY: 1,
           fill: active ? color : `${color}33`,
         }}
         transition={{
           opacity: { duration: 0.45, delay: 0.08 * point.index },
-          y: { duration: 0.45, delay: 0.08 * point.index, ease: 'easeOut' },
+          scaleY: { duration: 0.45, delay: 0.08 * point.index, ease: 'easeOut' },
           fill: { duration: 0.2 },
         }}
-        style={{ filter: active ? `drop-shadow(0 0 10px ${color}88)` : 'none' }}
+        style={{
+          filter: active ? `drop-shadow(0 0 10px ${color}88)` : 'none',
+          transformBox: 'fill-box',
+          transformOrigin: '50% 100%',
+        }}
       />
 
       {/* Ticker label on the axis */}

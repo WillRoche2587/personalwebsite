@@ -106,6 +106,27 @@
       }
     },
     {
+      "title": "ImpactGauge",
+      "ticker": "GAUG",
+      "period": "Sept 2025",
+      "context": "HopHacks 2025",
+      "tools": ["Next.js", "TypeScript", "Gemini API", "OpenWeatherMap", "jsPDF", "Tailwind CSS"],
+      "description": "A multi-agent planning platform that scores a charitable event before it happens, folding weather, calendar conflicts, and historical patterns into one readiness number.",
+      "link": "https://github.com/WillRoche2587/ImpactGauge-HopHacks2025",
+      "detail": {
+        "overview": "Nonprofits pick event dates on instinct and find out afterward whether it was a good one. ImpactGauge tries to answer that question in advance by running four specialized agents over the same event — weather, competing local events, historical turnout patterns — and then a fifth that aggregates their output into a single readiness score with the reasoning attached. The design decision that mattered was making every agent return the same shape: summary, findings, recommendations, risks, opportunities, and a confidence number. Once the contract is fixed, the scoring agent doesn't care which agent produced what, and a failing agent degrades the score instead of breaking the request.",
+        "highlights": [
+          "Five specialized Gemini agents behind a single validated API route",
+          "Standardized agent response contract — findings, recommendations, risks, opportunities, and a confidence score",
+          "Scoring agent aggregates the other analyses into one event readiness rating",
+          "OpenWeatherMap geocoding and forecast, matched to the window closest to the event date",
+          "Per-agent fallback analysis so a missing key or a failed upstream call degrades instead of erroring out",
+          "Exportable branded PDF report generated with jsPDF and html2canvas",
+          "Next.js 15 and React 19 with shadcn/ui, built at Johns Hopkins HopHacks 2025"
+        ]
+      }
+    },
+    {
       "title": "LemonLink",
       "ticker": "LMNK",
       "period": "2026",
