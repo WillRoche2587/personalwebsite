@@ -1,8 +1,9 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, MotionConfig } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import { Grain, CardGlow } from './components/Motion';
 import Home from './pages/Home';
 import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
@@ -13,21 +14,27 @@ export default function App() {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <ScrollToTop />
-      <Navbar />
-      <main className="flex-1">
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/projects/:slug" element={<ProjectDetail />} />
-            <Route path="/about" element={<About />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AnimatePresence>
-      </main>
-      <Footer />
-    </div>
+    // reducedMotion="user" makes every Framer Motion animation honour
+    // prefers-reduced-motion automatically; CSS handles the ambient layers.
+    <MotionConfig reducedMotion="user">
+      <div className="flex flex-col min-h-screen">
+        <ScrollToTop />
+        <Grain />
+        <CardGlow />
+        <Navbar />
+        <main className="flex-1">
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/:slug" element={<ProjectDetail />} />
+              <Route path="/about" element={<About />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AnimatePresence>
+        </main>
+        <Footer />
+      </div>
+    </MotionConfig>
   );
 }

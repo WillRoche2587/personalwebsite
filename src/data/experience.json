@@ -12,27 +12,37 @@
       "degree": "Computer Science, Minor in Mathematics",
       "date": "Sept 2023 – May 2025",
       "location": "Ewing, NJ",
-      "notes": ["GPA 3.92", "Dean's List", "Upsilon Pi Epsilon"]
+      "notes": ["GPA 3.92", "Dean's List", "Upsilon Pi Epsilon", "Transferred"]
     }
   ],
   "work": [
     {
-      "title": "Software Engineering Intern",
-      "company": "Natixis CIB",
-      "date": "June 2026 – Present",
+      "title": "Teaching Assistant",
+      "company": "NYU Tandon · CS-UY 4513",
+      "date": "Sept 2026 – Present",
       "location": "New York, NY",
       "highlights": [
-        "Automated a previously manual quarterly MPID reconciliation between internal systems and external FINRA/NASDAQ data",
-        "Built a Levenshtein-based name matching ETL pipeline that flagged gaps in ~7% of records for compliance remediation"
+        "Teaching assistant for Software Engineering (CS-UY 4513) at NYU Tandon"
       ]
     },
     {
-      "title": "Quantum Hardware Research Intern",
+      "title": "Software Engineering Intern",
+      "company": "Natixis CIB",
+      "date": "June 2026 – Aug 2026",
+      "location": "New York, NY",
+      "highlights": [
+        "Automated a previously manual quarterly MPID reconciliation between internal systems and external FINRA/NASDAQ data via a Levenshtein-based name matching ETL pipeline, flagging gaps in ~7% of records for compliance remediation",
+        "Modernized legacy reporting across credit risk, intraday liquidity, and treasury by migrating reports to SQL/Power BI",
+        "Eliminated manual report distribution by building Python scripts to generate and email Excel reports every working day"
+      ]
+    },
+    {
+      "title": "Quantum Computing Research Intern",
       "company": "NYU CQIP",
       "date": "June 2025 – Aug 2025",
       "location": "New York, NY",
       "highlights": [
-        "Fabricated a vertical graphene Josephson junction enabling ballistic supercurrent transport across a ~0.4nm channel",
+        "Fabricated a vertical graphene Josephson junction to enable ballistic supercurrent transport across a ~0.4nm channel",
         "Engineered channel geometry around graphene's coherence length, since Cooper pairs decouple beyond a monolayer",
         "Used photolithography, sputtering, and PDMS transfer; characterized with AFM and cryogenic resistance measurement"
       ]
@@ -43,7 +53,7 @@
       "date": "Jan 2024 – May 2025",
       "location": "Remote",
       "highlights": [
-        "Grew a personal brand to 3M+ views, 22K followers, and $25,000 in revenue through algorithm-driven growth strategies",
+        "Grew a personal brand to over 3M views, 22K followers, and $25,000 in revenue via algorithm-driven growth strategies",
         "Mentored 7 small-scale creators on TikTok Live, driving a 38% average revenue increase through heightened viewership"
       ]
     },
@@ -53,8 +63,8 @@
       "date": "Sept 2023 – May 2024",
       "location": "Ewing, NJ",
       "highlights": [
-        "Produced a cross-platform PWA improving campus resource access for 7,000+ students by extending the TCNJ Library App",
-        "Tracked availability of 27 study rooms via MySQL/PHP and motion sensor data"
+        "Produced a cross-platform PWA to improve campus resource access for 7,000+ students by modifying TCNJ Library App",
+        "Aimed to improve student efficiency by tracking availability of 27 study rooms via MySQL/PHP and motion sensor data"
       ]
     }
   ],

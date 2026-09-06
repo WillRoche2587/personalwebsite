@@ -1,17 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowUpRight, FileText, Code2, Layers, Database, Terminal, GraduationCap } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowRight, ArrowUpRight, FileText, Mail } from 'lucide-react';
 import { GitHubIcon } from '../components/SocialIcons';
 import PageTransition from '../components/PageTransition';
-import SectionHeading from '../components/SectionHeading';
-import { HomeDecorations } from '../components/PageDecorations';
+import ProjectCard from '../components/ProjectCard';
+import { Atmosphere, Reveal, Rule, Section, FadeIn, EASE } from '../components/Motion';
 import personal from '../data/personal.json';
 import skills from '../data/skills.json';
 import experience from '../data/experience.json';
+import projectData from '../data/projects.json';
 
-const A = 'var(--accent-home)';
-const ACCENT_HEX = '#38bdf8';
+const projects = projectData.featured;
+
+/* Pinned by code rather than by array position, so reordering
+   projects.json can't silently change what the homepage features. */
+const FEATURED_CODES = ['RSKR', 'LMNK', 'GAUG'];
+const featured = FEATURED_CODES
+  .map(code => projects.find(p => p.code === code))
+  .filter(Boolean);
 
 /* ─── Rotating role in the subhead ─── */
 function TypingRole() {
@@ -21,10 +28,10 @@ function TypingRole() {
   const role = personal.roles[roleIndex];
 
   useEffect(() => {
-    const speed = deleting ? 35 : 75;
+    const speed = deleting ? 32 : 68;
     const timer = setTimeout(() => {
       if (!deleting && charIndex === role.length) {
-        setTimeout(() => setDeleting(true), 1600);
+        setTimeout(() => setDeleting(true), 1900);
         return;
       }
       if (deleting && charIndex === 0) {
@@ -37,274 +44,111 @@ function TypingRole() {
     return () => clearTimeout(timer);
   }, [charIndex, deleting, role, roleIndex]);
 
-  return (
-    <span className="typing-cursor" style={{ color: A }}>
-      {role.substring(0, charIndex)}
-    </span>
-  );
+  return <span className="caret">{role.substring(0, charIndex)}</span>;
 }
 
-/* ─── Hero visual: a shell session typing itself, over a live candlestick
-       backdrop. The shell is a nod to the Linux shell project; the candles
-       to where most of the other work points. ─── */
+/* ─── Hero backdrop: a slow, breathing line field ─── */
+function HeroField() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+  const y = useTransform(scrollYProgress, [0, 1], [0, 140]);
+  const fade = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
-const SESSION = [
-  { kind: 'cmd', text: 'whoami' },
-  { kind: 'out', text: "William Roche — CS @ NYU '27" },
-  { kind: 'cmd', text: 'cat focus.txt' },
-  { kind: 'out', text: 'market systems · low-level · data pipelines' },
-  { kind: 'cmd', text: 'git log --oneline -1' },
-  { kind: 'out', text: 'a4f2c1e  feat: ship it' },
-];
-
-/* Character offset at which each line begins, so a single "typed" counter
-   can be sliced across all of them without mutating state during render. */
-const SESSION_OFFSETS = SESSION.reduce(
-  (acc, line) => [...acc, acc[acc.length - 1] + line.text.length],
-  [0],
-);
-const SESSION_TOTAL = SESSION_OFFSETS[SESSION_OFFSETS.length - 1];
-
-function useTypedSession() {
-  const total = SESSION_TOTAL;
-  const [typed, setTyped] = useState(0);
-
-  useEffect(() => {
-    let raf;
-    let start;
-    const typeMs = 6000;
-    const holdMs = 2200;
-    const step = (ts) => {
-      if (!start) start = ts;
-      const elapsed = (ts - start) % (typeMs + holdMs);
-      const progress = Math.min(1, elapsed / typeMs);
-      setTyped(Math.floor(progress * total));
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [total]);
-
-  // Slice the session down to the characters revealed so far.
-  const lines = SESSION.map((line, i) => {
-    const available = typed - SESSION_OFFSETS[i];
-    const shown = line.text.slice(0, Math.max(0, Math.min(line.text.length, available)));
-    return { ...line, shown, done: shown.length === line.text.length };
-  });
-  const activeIndex = lines.findIndex(l => !l.done);
-
-  return { lines, activeIndex };
-}
-
-/* Deterministic candles so the backdrop is stable across renders. */
-const BACKDROP_CANDLES = [
-  { o: 58, c: 44, h: 40, l: 62 }, { o: 44, c: 50, h: 38, l: 55 },
-  { o: 50, c: 36, h: 31, l: 54 }, { o: 36, c: 41, h: 30, l: 46 },
-  { o: 41, c: 30, h: 25, l: 45 }, { o: 30, c: 34, h: 24, l: 39 },
-  { o: 34, c: 22, h: 17, l: 38 }, { o: 22, c: 27, h: 16, l: 31 },
-  { o: 27, c: 15, h: 11, l: 30 }, { o: 15, c: 19, h: 9, l: 23 },
-];
-
-function HeroVisual() {
-  const { lines, activeIndex } = useTypedSession();
-  const up = '#22c55e';
+  const rings = [
+    { r: 120, dur: 46, dir: 1, dash: '2 9' },
+    { r: 176, dur: 68, dir: -1, dash: '28 14' },
+    { r: 236, dur: 92, dir: 1, dash: '1 7' },
+    { r: 300, dur: 120, dir: -1, dash: '44 18 3 18' },
+  ];
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      ref={ref}
+      aria-hidden="true"
+      className="decor-layer"
       style={{
-        position: 'relative', width: '100%', aspectRatio: '1/1', minHeight: 400,
+        y, opacity: fade,
+        position: 'absolute', inset: 0,
+        pointerEvents: 'none', zIndex: 0,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}
     >
-      {/* Ambient glow */}
-      <motion.div
-        style={{
-          position: 'absolute', inset: '6%', borderRadius: 28,
-          background: `radial-gradient(circle at 30% 25%, ${ACCENT_HEX}38, transparent 58%), radial-gradient(circle at 78% 80%, ${up}22, transparent 58%)`,
-          filter: 'blur(52px)',
-        }}
-        animate={{ opacity: [0.55, 0.85, 0.55] }}
-        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-      />
+      <svg viewBox="-340 -340 680 680" style={{ width: 'min(150vh, 118vw)', height: 'auto', overflow: 'visible' }}>
+        <defs>
+          <radialGradient id="hero-core">
+            <stop offset="0%" stopColor="#fff" stopOpacity="0.55" />
+            <stop offset="45%" stopColor="#cfd9ef" stopOpacity="0.10" />
+            <stop offset="100%" stopColor="#8fa0c4" stopOpacity="0" />
+          </radialGradient>
+        </defs>
 
-      {/* Candlestick backdrop */}
-      <svg
-        viewBox="0 0 400 400"
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', overflow: 'visible' }}
-        aria-hidden="true"
-      >
-        {/* Chart gridlines */}
-        {Array.from({ length: 7 }).map((_, i) => (
-          <line
-            key={i}
-            x1="10" y1={40 + i * 50} x2="390" y2={40 + i * 50}
-            stroke={ACCENT_HEX} strokeWidth="0.5" opacity="0.07"
-          />
-        ))}
-
-        {/* Candles rising left to right */}
-        {BACKDROP_CANDLES.map((k, i) => {
-          const x = 34 + i * 36;
-          const top = Math.min(k.o, k.c) * 4;
-          const bodyH = Math.max(6, Math.abs(k.o - k.c) * 4);
-          return (
-            <motion.g
-              key={i}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 0.5, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 + i * 0.09, ease: 'easeOut' }}
-            >
-              <line x1={x} y1={k.h * 4} x2={x} y2={k.l * 4} stroke={up} strokeWidth="1" opacity="0.6" />
-              <rect x={x - 6} y={top} width="12" height={bodyH} fill={`${up}33`} stroke={up} strokeWidth="1" rx="1" />
-            </motion.g>
-          );
-        })}
-
-        {/* Trend line through the closes */}
-        <motion.path
-          d={BACKDROP_CANDLES.map((k, i) => `${i === 0 ? 'M' : 'L'}${34 + i * 36},${k.c * 4}`).join(' ')}
-          fill="none"
-          stroke={ACCENT_HEX}
-          strokeWidth="1.5"
-          strokeDasharray="4 5"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 0.4 }}
-          transition={{ duration: 2, delay: 1.4, ease: 'easeOut' }}
+        <motion.circle
+          r="250"
+          fill="url(#hero-core)"
+          animate={{ opacity: [0.45, 0.8, 0.45], scale: [1, 1.08, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
         />
+
+        {rings.map((ring, i) => (
+          <motion.g
+            key={i}
+            animate={{ rotate: 360 * ring.dir }}
+            transition={{ duration: ring.dur, repeat: Infinity, ease: 'linear' }}
+          >
+            <circle
+              r={ring.r}
+              fill="none"
+              stroke="#fff"
+              strokeWidth="0.7"
+              strokeOpacity={0.16 - i * 0.025}
+              strokeDasharray={ring.dash}
+            />
+            <circle cx={ring.r} cy="0" r="2" fill="#fff" fillOpacity={0.34 - i * 0.05} />
+          </motion.g>
+        ))}
       </svg>
-
-      {/* Drifting glyphs */}
-      {[
-        { ch: '$_', top: '7%', left: '5%', size: 22, dur: 10, delay: 0 },
-        { ch: '↑', top: '13%', right: '7%', size: 20, dur: 12, delay: 1.4 },
-        { ch: '{ }', top: '80%', left: '8%', size: 19, dur: 11, delay: 0.7 },
-        { ch: 'σ', top: '84%', right: '11%', size: 22, dur: 13, delay: 2.1 },
-        { ch: '~', top: '47%', left: '1%', size: 24, dur: 14, delay: 0.3 },
-        { ch: '%', top: '52%', right: '2%', size: 20, dur: 11, delay: 1.1 },
-      ].map((g, i) => (
-        <motion.div
-          key={i}
-          style={{
-            position: 'absolute',
-            top: g.top, left: g.left, right: g.right,
-            fontFamily: 'var(--font-mono)',
-            fontSize: g.size, fontWeight: 600,
-            color: i % 2 === 0 ? ACCENT_HEX : up,
-            textShadow: `0 0 12px ${i % 2 === 0 ? ACCENT_HEX : up}80`,
-            userSelect: 'none', pointerEvents: 'none',
-          }}
-          animate={{ y: [-6, 8, -6], opacity: [0.22, 0.5, 0.22] }}
-          transition={{ duration: g.dur, delay: g.delay, repeat: Infinity, ease: 'easeInOut' }}
-          aria-hidden="true"
-        >
-          {g.ch}
-        </motion.div>
-      ))}
-
-      {/* Terminal card */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.94 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        style={{
-          position: 'relative', width: '82%',
-          background: 'linear-gradient(180deg, #11161f 0%, #0a0e15 100%)',
-          border: `1px solid ${ACCENT_HEX}38`,
-          borderRadius: 12,
-          boxShadow: `0 30px 80px -20px ${ACCENT_HEX}4d, inset 0 0 0 1px rgba(255,255,255,0.03), 0 0 60px ${ACCENT_HEX}1f`,
-          overflow: 'hidden', zIndex: 5,
-          fontFamily: 'var(--font-mono)',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex', alignItems: 'center', gap: 7,
-            padding: '9px 13px',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
-            background: 'rgba(255,255,255,0.02)',
-          }}
-        >
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57' }} />
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#febc2e' }} />
-          <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c840' }} />
-          <span style={{ marginLeft: 10, fontSize: 11, color: 'var(--text-dim)', letterSpacing: '0.04em' }}>
-            willroche@nyu.edu: ~
-          </span>
-        </div>
-
-        <div style={{ padding: '14px 14px 18px', fontSize: 'clamp(0.68rem, 1.05vw, 0.82rem)', lineHeight: 1.75, minHeight: 190 }}>
-          {lines.map((line, i) => {
-            if (!line.shown && i > activeIndex) return <div key={i} style={{ height: '1.75em' }} />;
-            return (
-              <div key={i} style={{ display: 'flex', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                {line.kind === 'cmd' && (
-                  <span style={{ color: ACCENT_HEX, flexShrink: 0, marginRight: 8 }}>$</span>
-                )}
-                <span style={{ color: line.kind === 'cmd' ? 'var(--text-primary)' : 'var(--text-secondary)' }}>
-                  {line.shown}
-                  {i === activeIndex && (
-                    <motion.span
-                      style={{
-                        display: 'inline-block', width: 7, height: '0.95em',
-                        background: ACCENT_HEX, marginLeft: 2,
-                        verticalAlign: 'text-bottom', boxShadow: `0 0 8px ${ACCENT_HEX}`,
-                      }}
-                      animate={{ opacity: [1, 0, 1] }}
-                      transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
-                    />
-                  )}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </motion.div>
     </motion.div>
   );
 }
 
-/* ─── Status tape: a Bloomberg-style marquee of actual facts ─── */
+/* ─── Facts marquee ─── */
 const TAPE = [
-  'NYU · B.S. COMPUTER SCIENCE',
-  'MINOR IN MATHEMATICS',
+  'NYU · B.S. Computer Science',
+  'Minor in Mathematics',
   'GPA 3.946',
-  "DEAN'S LIST",
-  'NATIXIS CIB · SWE INTERN',
-  'NYU CQIP · QUANTUM HARDWARE RESEARCH',
-  'UPSILON PI EPSILON',
-  'NEW YORK, NY',
+  "Dean's List",
+  'Teaching Assistant · CS-UY 4513',
+  'Natixis CIB · SWE Intern',
+  'NYU CQIP · Quantum Computing Research',
+  'Upsilon Pi Epsilon',
+  'New York, NY',
 ];
 
-function StatusTape() {
+function Marquee() {
   const items = [...TAPE, ...TAPE];
   return (
     <div
-      className="ticker-rail"
+      className="tape-rail"
       style={{
         position: 'relative', zIndex: 10,
-        borderTop: '1px solid var(--border-color)',
-        borderBottom: '1px solid var(--border-color)',
-        background: 'rgba(12, 16, 24, 0.6)',
+        borderTop: '1px solid var(--line)',
+        borderBottom: '1px solid var(--line)',
         overflow: 'hidden',
-        maskImage: 'linear-gradient(90deg, transparent, black 6%, black 94%, transparent)',
-        WebkitMaskImage: 'linear-gradient(90deg, transparent, black 6%, black 94%, transparent)',
+        maskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
+        WebkitMaskImage: 'linear-gradient(90deg, transparent, black 8%, black 92%, transparent)',
       }}
     >
-      <div className="ticker-track" style={{ padding: '11px 0' }}>
+      <div className="tape-track" style={{ padding: '15px 0' }}>
         {items.map((item, i) => (
           <span
             key={i}
-            className="mono text-tiny"
+            className="text-small"
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: 14,
-              padding: '0 26px', whiteSpace: 'nowrap',
-              color: 'var(--text-secondary)', letterSpacing: '0.09em',
+              display: 'inline-flex', alignItems: 'center', gap: 18,
+              padding: '0 26px', whiteSpace: 'nowrap', color: 'var(--silver-dim)',
             }}
           >
-            <span style={{ color: A, opacity: 0.65 }}>▲</span>
+            <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--silver-mute)' }} />
             {item}
           </span>
         ))}
@@ -313,271 +157,243 @@ function StatusTape() {
   );
 }
 
-/* ─── Skills ─── */
-const CATEGORY_ICONS = { Code2, Layers, Database, Terminal };
-
-function SkillCategory({ category, index }) {
-  const Icon = CATEGORY_ICONS[category.icon] || Code2;
-
+/* ─── Experience ─── */
+function Job({ item, index }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.07, duration: 0.4 }}
-      className="card card-pad"
-      style={{ position: 'relative', overflow: 'hidden' }}
-    >
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${A}, transparent)` }} />
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-        <div
-          style={{
-            width: 34, height: 34, borderRadius: 9,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'var(--accent-home-dim)', border: `1px solid ${ACCENT_HEX}30`,
-            color: A, flexShrink: 0,
-          }}
-        >
-          <Icon size={17} />
-        </div>
-        <span className="text-card-title">{category.name}</span>
-      </div>
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-        {category.skills.map(skill => (
-          <span
-            key={skill}
-            className="skill-chip mono"
-            style={{
-              padding: '5px 11px', borderRadius: 6,
-              background: 'var(--bg-secondary)',
-              border: '1px solid var(--border-color)',
-              fontSize: '0.72rem', fontWeight: 500,
-              color: 'var(--text-secondary)',
-              transition: 'all 0.2s ease',
-              '--chip-accent': A,
-            }}
-          >
-            {skill}
-          </span>
-        ))}
-      </div>
-    </motion.div>
-  );
-}
-
-/* ─── Experience timeline ─── */
-function WorkItem({ item, index }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -12 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ delay: index * 0.06, duration: 0.4 }}
-      style={{ position: 'relative', paddingLeft: 28, paddingBottom: 34 }}
-    >
-      {/* Rail + node */}
-      <div style={{ position: 'absolute', left: 3, top: 12, bottom: 0, width: 1, background: `${ACCENT_HEX}22` }} />
-      <div
-        style={{
-          position: 'absolute', left: 0, top: 8, width: 7, height: 7, borderRadius: '50%',
-          background: A, boxShadow: `0 0 10px ${ACCENT_HEX}66`,
-        }}
-      />
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '2px 12px' }}>
-        <p className="text-card-title">{item.title}</p>
-        <span className="mono text-tiny" style={{ color: A }}>{item.company}</span>
-      </div>
-      <p className="mono text-tiny mt-sm" style={{ color: 'var(--text-dim)' }}>
-        {item.date} · {item.location}
-      </p>
-
-      <ul style={{ listStyle: 'none', marginTop: 12 }}>
-        {item.highlights.map((h, i) => (
-          <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginTop: i === 0 ? 0 : 8 }}>
-            <span
-              style={{
-                flexShrink: 0, width: 4, height: 4, borderRadius: '50%',
-                background: 'var(--text-dim)', marginTop: 9,
-              }}
-            />
-            <span className="text-small" style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>{h}</span>
-          </li>
-        ))}
-      </ul>
-    </motion.div>
-  );
-}
-
-function EducationCard({ item, index }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.08, duration: 0.4 }}
-      className="card card-pad"
-    >
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-        <div
-          style={{
-            width: 34, height: 34, borderRadius: 9, flexShrink: 0,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'var(--accent-home-dim)', border: `1px solid ${ACCENT_HEX}30`, color: A,
-          }}
-        >
-          <GraduationCap size={17} />
-        </div>
-        <div style={{ minWidth: 0 }}>
-          <p className="text-card-title">{item.institution}</p>
-          <p className="text-small mt-sm" style={{ color: 'var(--text-secondary)' }}>{item.degree}</p>
-          <p className="mono text-tiny mt-sm" style={{ color: 'var(--text-dim)' }}>
-            {item.date} · {item.location}
+    <FadeIn delay={index * 0.05}>
+      <div className="job-row">
+        <div>
+          <p className="mono text-tiny" style={{ color: 'var(--silver-bright)', letterSpacing: '0.06em' }}>
+            {item.date}
           </p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 12 }}>
-            {item.notes.map(note => (
-              <span
-                key={note}
-                className="mono"
-                style={{
-                  fontSize: '0.68rem', fontWeight: 500, padding: '3px 9px', borderRadius: 5,
-                  background: 'var(--accent-home-dim)', border: `1px solid ${ACCENT_HEX}2e`, color: A,
-                }}
-              >
-                {note}
-              </span>
-            ))}
+          <p className="mono text-tiny" style={{ color: 'var(--silver-mute)', marginTop: 6 }}>
+            {item.location}
+          </p>
+        </div>
+
+        <div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, flexWrap: 'wrap', marginBottom: 4 }}>
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 600 }}>{item.title}</h3>
+            <span className="text-small" style={{ color: 'var(--silver-dim)' }}>{item.company}</span>
           </div>
+          <ul style={{ listStyle: 'none', marginTop: 14 }}>
+            {item.highlights.map((h, i) => (
+              <li key={i} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', marginTop: i === 0 ? 0 : 10 }}>
+                <span style={{ flexShrink: 0, width: 5, height: 5, borderRadius: '50%', background: 'var(--silver-mute)', marginTop: 9 }} />
+                <span className="text-small" style={{ color: 'var(--silver)', lineHeight: 1.75 }}>{h}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-    </motion.div>
+    </FadeIn>
   );
 }
 
 export default function Home() {
   return (
     <PageTransition>
-      <div className="theme-home" style={{ minHeight: '100vh', position: 'relative' }}>
-        <HomeDecorations />
+      <div style={{ minHeight: '100vh', position: 'relative' }}>
+        <Atmosphere />
 
         <style>{`
-          .hero-grid { display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center; }
-          @media (min-width: 1024px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; gap: 56px; } }
-          .hero-visual-wrap { display: none; }
-          @media (min-width: 1024px) { .hero-visual-wrap { display: block; } }
-          .edu-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-          @media (min-width: 768px) { .edu-grid { grid-template-columns: 1fr 1fr; } }
+          .job-row {
+            display: grid; grid-template-columns: 1fr; gap: 10px;
+            padding: 32px 0; border-top: 1px solid var(--line);
+          }
+          @media (min-width: 820px) { .job-row { grid-template-columns: 210px 1fr; gap: 44px; } }
+          .skills-grid { display: grid; grid-template-columns: 1fr; gap: 34px; }
+          @media (min-width: 760px) { .skills-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; } }
         `}</style>
 
-        {/* Hero */}
-        <section style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', minHeight: '90vh' }}>
-          <div className="page-container" style={{ width: '100%', paddingTop: 130, paddingBottom: 70 }}>
-            <div className="hero-grid">
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        {/* ══ HERO ══ */}
+        <section
+          style={{
+            position: 'relative', zIndex: 10, minHeight: '100vh',
+            display: 'flex', alignItems: 'center', textAlign: 'center',
+          }}
+        >
+          <HeroField />
+          <div className="page-container" style={{ width: '100%', paddingTop: 130, paddingBottom: 110, position: 'relative', zIndex: 2 }}>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.9, ease: EASE }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 12, marginBottom: 30 }}
+            >
+              <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff', boxShadow: '0 0 14px rgba(230,240,255,0.9)' }} />
+              <span className="eyebrow">{personal.location}</span>
+            </motion.div>
+
+            <Reveal
+              as="h1"
+              className="text-hero"
+              text={personal.name}
+              delay={0.12}
+              stagger={0.1}
+              style={{ display: 'block', marginBottom: 26 }}
+            />
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.7, ease: EASE }}
+            >
+              <p
+                style={{
+                  fontFamily: 'var(--font-display)',
+                  fontSize: 'clamp(1.15rem, 2.6vw, 1.7rem)',
+                  fontWeight: 400,
+                  letterSpacing: '-0.02em',
+                  color: 'var(--silver)',
+                  marginBottom: 34,
+                  minHeight: '1.5em',
+                }}
               >
-                <p className="text-label mb-lg" style={{ color: A }}>{personal.location}</p>
+                <TypingRole />
+              </p>
 
-                <h1 className="text-hero" style={{ marginBottom: 14 }}>
-                  {personal.name}
-                </h1>
+              <p
+                className="text-body"
+                style={{ color: 'var(--silver-dim)', lineHeight: 1.9, maxWidth: 560, margin: '0 auto 42px' }}
+              >
+                {personal.heroText}
+              </p>
 
-                <h2 style={{ fontSize: 'clamp(1.15rem, 2.6vw, 1.7rem)', fontWeight: 500, letterSpacing: '-0.02em', marginBottom: 26, color: 'var(--text-secondary)' }}>
-                  a <TypingRole />
-                </h2>
-
-                <p className="text-body" style={{ color: 'var(--text-secondary)', lineHeight: 1.85, marginBottom: 34, maxWidth: 500 }}>
-                  {personal.heroText}
-                </p>
-
-                <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-                  <a
-                    href={personal.socials.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-pad"
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 10,
-                      borderRadius: 10, fontWeight: 600, fontSize: '0.88rem',
-                      background: A, color: 'var(--bg-primary)',
-                      boxShadow: `0 4px 24px ${ACCENT_HEX}30`,
-                    }}
-                  >
-                    <GitHubIcon size={16} /> GitHub
-                  </a>
-                  <a
-                    href={personal.resumeUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-pad"
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 10,
-                      borderRadius: 10, fontWeight: 600, fontSize: '0.88rem',
-                      border: `1px solid ${ACCENT_HEX}45`, color: A,
-                    }}
-                  >
-                    <FileText size={16} /> Resume
-                  </a>
-                  <Link
-                    to="/projects"
-                    className="btn-pad"
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: 8,
-                      borderRadius: 10, fontWeight: 600, fontSize: '0.88rem',
-                      border: '1px solid var(--border-color)', color: 'var(--text-secondary)',
-                    }}
-                  >
-                    Projects <ArrowUpRight size={15} />
-                  </Link>
-                </div>
-              </motion.div>
-
-              <div className="hero-visual-wrap">
-                <HeroVisual />
+              <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Link to="/projects" className="btn btn-primary">
+                  See my work <ArrowRight size={17} />
+                </Link>
+                <a href={personal.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                  <FileText size={17} /> Resume
+                </a>
+                <a href={personal.socials.github} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                  <GitHubIcon size={17} /> GitHub
+                </a>
               </div>
-            </div>
+            </motion.div>
           </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.8, duration: 1 }}
+            style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}
+          >
+            <span className="eyebrow" style={{ fontSize: '0.62rem' }}>Scroll</span>
+            <motion.div
+              style={{ width: 1, height: 42, background: 'linear-gradient(180deg, var(--silver-mute), transparent)' }}
+              animate={{ scaleY: [0.3, 1, 0.3] }}
+              transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </motion.div>
         </section>
 
-        <StatusTape />
+        <Marquee />
 
-        {/* Skills */}
-        <section className="section-gap" style={{ position: 'relative', zIndex: 10 }}>
+        {/* ══ WORK ══ */}
+        <section className="section" style={{ position: 'relative', zIndex: 10, paddingTop: 104 }}>
           <div className="page-container">
-            <SectionHeading accent={ACCENT_HEX} index="01">Toolkit</SectionHeading>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 380px), 1fr))', gap: 20 }}>
-              {skills.categories.map((cat, i) => (
-                <SkillCategory key={cat.name} category={cat} index={i} />
+            <Section number="01" title="Selected Projects" id="work">
+              A few favourites. Click through for the full story.
+            </Section>
+
+            <div className="tile-band"><div className="grid-projects">
+              {featured.map((project, i) => (
+                <ProjectCard
+                  key={project.code}
+                  project={project}
+                  number={i + 1}
+                  delay={i * 0.06}
+                />
               ))}
-            </div>
+            </div></div>
+
+            <FadeIn delay={0.1}>
+              <div style={{ marginTop: 40, display: 'flex', justifyContent: 'center' }}>
+                <Link to="/projects" className="btn btn-secondary">
+                  All projects <ArrowRight size={17} />
+                </Link>
+              </div>
+            </FadeIn>
           </div>
         </section>
 
-        {/* Experience */}
-        <section className="section-gap" style={{ position: 'relative', zIndex: 10, paddingTop: 24 }}>
+        {/* ══ EXPERIENCE ══ */}
+        <section className="section" style={{ position: 'relative', zIndex: 10 }}>
           <div className="page-container">
-            <SectionHeading accent={ACCENT_HEX} index="02">Experience</SectionHeading>
+            <Section number="02" title="Experience" id="experience" />
             <div>
               {experience.work.map((item, i) => (
-                <WorkItem key={`${item.company}-${i}`} item={item} index={i} />
+                <Job key={`${item.company}-${i}`} item={item} index={i} />
               ))}
             </div>
           </div>
         </section>
 
-        {/* Education */}
-        <section className="section-gap" style={{ position: 'relative', zIndex: 10, paddingTop: 0 }}>
+        {/* ══ SKILLS ══ */}
+        <section className="section" style={{ position: 'relative', zIndex: 10 }}>
           <div className="page-container">
-            <SectionHeading accent={ACCENT_HEX} index="03">Education</SectionHeading>
-            <div className="edu-grid">
-              {experience.education.map((item, i) => (
-                <EducationCard key={item.institution} item={item} index={i} />
+            <Section number="03" title="Skills" id="skills" />
+            <div className="skills-grid">
+              {skills.categories.map((cat, i) => (
+                <FadeIn key={cat.name} delay={i * 0.06}>
+                  <p className="eyebrow" style={{ marginBottom: 16 }}>{cat.name}</p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    {cat.skills.map(skill => <span key={skill} className="tag">{skill}</span>)}
+                  </div>
+                </FadeIn>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* ══ EDUCATION ══ */}
+        <section className="section" style={{ position: 'relative', zIndex: 10 }}>
+          <div className="page-container">
+            <Section number="04" title="Education" id="education" />
+            <div className="grid-two">
+              {experience.education.map((item, i) => (
+                <FadeIn key={item.institution} delay={i * 0.07}>
+                  <div className="card card-pad" style={{ height: '100%' }}>
+                    <h3 style={{ fontSize: '1.12rem', fontWeight: 600, marginBottom: 8 }}>{item.institution}</h3>
+                    <p className="text-small" style={{ color: 'var(--silver)' }}>{item.degree}</p>
+                    <p className="mono text-tiny" style={{ color: 'var(--silver-mute)', marginTop: 10 }}>
+                      {item.date} · {item.location}
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 18 }}>
+                      {item.notes.map(note => <span key={note} className="tag">{note}</span>)}
+                    </div>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ══ CONTACT ══ */}
+        <section style={{ position: 'relative', zIndex: 10, paddingBottom: 130 }}>
+          <div className="page-container">
+            <Rule style={{ marginBottom: 64 }} />
+            <FadeIn>
+              <div style={{ textAlign: 'center' }}>
+                <p className="eyebrow" style={{ marginBottom: 18 }}>Contact</p>
+                <h2 className="text-section-title" style={{ marginBottom: 20 }}>
+                  Let's talk.
+                </h2>
+                <p className="text-body" style={{ color: 'var(--silver-dim)', maxWidth: 420, margin: '0 auto 36px' }}>
+                  Always up for a good problem.
+                </p>
+                <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
+                  <a href={`mailto:${personal.email}`} className="btn btn-primary">
+                    <Mail size={17} /> {personal.email}
+                  </a>
+                  <Link to="/about" className="btn btn-secondary">
+                    More about me <ArrowUpRight size={17} className="arrow-slide" />
+                  </Link>
+                </div>
+              </div>
+            </FadeIn>
           </div>
         </section>
       </div>

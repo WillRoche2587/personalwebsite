@@ -8,8 +8,8 @@
     "systems tinkerer"
   ],
   "tagline": "Computer Science @ NYU",
-  "heroText": "I'm a CS student at NYU with a math minor, currently writing software for the front office at Natixis. I like problems that sit where clean abstractions meet messy reality — reconciliation pipelines, tax engines, shells, and the occasional superconducting junction.",
-  "aboutText": "I'm a junior at NYU studying Computer Science with a minor in Mathematics, after transferring from The College of New Jersey. Most of what I build lives somewhere between finance and systems: FIFO tax engines, real-time market data, ETL pipelines that have to be right the first time. Before that I spent a summer in a quantum hardware lab fabricating graphene Josephson junctions, which taught me more about patience than any codebase has.",
+  "heroText": "I'm a CS student at NYU with a math minor, finishing my senior year and TA-ing Tandon's software engineering course. I like problems that sit where clean abstractions meet messy reality — reconciliation pipelines, tax engines, shells, and the occasional superconducting junction.",
+  "aboutText": "I'm a senior at NYU studying Computer Science with a minor in Mathematics, after transferring from The College of New Jersey. Most of what I build lives somewhere between finance and systems: FIFO tax engines, real-time market data, ETL pipelines that have to be right the first time. Before that I spent a summer in a quantum hardware lab fabricating graphene Josephson junctions, which taught me more about patience than any codebase has.",
   "location": "New York, NY",
   "email": "wroche2587@gmail.com",
   "schoolEmail": "WillRoche@nyu.edu",

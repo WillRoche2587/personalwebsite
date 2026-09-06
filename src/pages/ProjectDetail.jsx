@@ -2,20 +2,11 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ExternalLink, FileText } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
-import { ProjectsDecorations } from '../components/PageDecorations';
+import { Atmosphere, Reveal, Rule, FadeIn, EASE } from '../components/Motion';
 import { toSlug } from '../lib/slug';
 import data from '../data/projects.json';
 
-const A = 'var(--accent-projects)';
-const ACCENT_HEX = '#22c55e';
-
 const projects = data.featured;
-
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5, delay },
-});
 
 export default function ProjectDetail() {
   const { slug } = useParams();
@@ -25,25 +16,16 @@ export default function ProjectDetail() {
   if (!project) {
     return (
       <PageTransition>
-        <div className="theme-projects" style={{ minHeight: '100vh', position: 'relative' }}>
-          <ProjectsDecorations />
+        <div style={{ minHeight: '100vh', position: 'relative' }}>
+          <Atmosphere />
           <section className="page-hero" style={{ position: 'relative', zIndex: 10 }}>
             <div className="page-container">
-              <p className="text-label mb-lg" style={{ color: A }}>404</p>
-              <h1 className="text-hero mb-lg">Project not found</h1>
-              <p className="text-body mb-xl" style={{ color: 'var(--text-secondary)' }}>
-                That position isn't in the book.
+              <h1 className="text-page-title" style={{ marginBottom: 24 }}>Project not found</h1>
+              <p className="text-body" style={{ color: 'var(--silver-dim)', marginBottom: 36, maxWidth: 440 }}>
+                That project doesn't exist.
               </p>
-              <Link
-                to="/projects"
-                className="btn-pad"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 8,
-                  borderRadius: 10, fontSize: '0.85rem', fontWeight: 600,
-                  background: A, color: 'var(--bg-primary)',
-                }}
-              >
-                <ArrowLeft size={15} /> Back to projects
+              <Link to="/projects" className="btn btn-primary">
+                <ArrowLeft size={17} /> All projects
               </Link>
             </div>
           </section>
@@ -58,83 +40,82 @@ export default function ProjectDetail() {
 
   return (
     <PageTransition>
-      <div className="theme-projects" style={{ minHeight: '100vh', position: 'relative' }}>
-        <ProjectsDecorations />
+      <div style={{ minHeight: '100vh', position: 'relative' }}>
+        <Atmosphere />
 
-        {/* Header */}
-        <section className="page-hero" style={{ position: 'relative', zIndex: 10, paddingBottom: 32 }}>
-          <div className="page-container" style={{ maxWidth: 780 }}>
-            <motion.div {...fadeUp()}>
+        {/* a wash of light behind the title */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute', top: 0, left: 0, right: 0, height: 560, zIndex: 1,
+            background: 'radial-gradient(ellipse 62% 70% at 50% 0%, rgba(214,228,255,0.10) 0%, transparent 68%)',
+          }}
+        />
+
+        <section className="page-hero" style={{ position: 'relative', zIndex: 10, paddingBottom: 40 }}>
+          <div className="page-container" style={{ maxWidth: 860 }}>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
               <Link
                 to="/projects"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 7,
-                  color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: 30,
-                  transition: 'color 0.2s',
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = ACCENT_HEX; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-secondary)'; }}
+                className="link-wipe"
+                style={{ color: 'var(--silver-dim)', fontSize: '0.9rem', marginBottom: 40 }}
               >
-                <ArrowLeft size={15} /> All projects
+                <ArrowLeft size={16} /> All projects
               </Link>
+            </motion.div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 18 }}>
-                <span
-                  className="ticker-chip"
-                  style={{ background: 'var(--accent-projects-dim)', border: `1px solid ${ACCENT_HEX}55`, color: A }}
-                >
-                  ${project.ticker}
-                </span>
-                <span className="mono text-tiny" style={{ color: 'var(--text-dim)' }}>{project.period}</span>
-                {project.context && (
-                  <span className="mono text-tiny" style={{ color: 'var(--text-dim)' }}>· {project.context}</span>
-                )}
-              </div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap', margin: '28px 0 22px' }}
+            >
+              <span className="eyebrow">{project.period}</span>
+              {project.context && (
+                <>
+                  <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--silver-mute)' }} />
+                  <span className="eyebrow">{project.context}</span>
+                </>
+              )}
+            </motion.div>
 
-              <h1 className="text-hero" style={{ marginBottom: 18 }}>{project.title}</h1>
+            <Reveal as="h1" className="text-page-title" text={project.title} delay={0.16} />
 
-              <p className="text-body" style={{ color: 'var(--text-secondary)', lineHeight: 1.85 }}>
-                {project.description}
-              </p>
+            <Rule delay={0.5} style={{ marginTop: 30, marginBottom: 30 }} />
 
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 24 }}>
-                {project.tools.map(tool => (
-                  <span key={tool} className="tag">{tool}</span>
-                ))}
+            <motion.p
+              className="text-body"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+              style={{ color: 'var(--silver)', lineHeight: 1.95, fontSize: '1.08rem' }}
+            >
+              {project.description}
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.65, ease: EASE }}
+            >
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginTop: 26 }}>
+                {project.tools.map(tool => <span key={tool} className="tag">{tool}</span>)}
               </div>
 
               {(project.link || project.papers) && (
-                <div style={{ display: 'flex', gap: 12, marginTop: 26, flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: 12, marginTop: 32, flexWrap: 'wrap' }}>
                   {project.link && (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-pad"
-                      style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 8,
-                        borderRadius: 10, fontSize: '0.85rem', fontWeight: 600,
-                        background: 'var(--accent-projects-dim)',
-                        border: `1px solid ${ACCENT_HEX}55`, color: A,
-                      }}
-                    >
-                      View project <ExternalLink size={14} />
+                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                      Visit the project <ExternalLink size={16} />
                     </a>
                   )}
                   {project.papers?.map(paper => (
-                    <a
-                      key={paper.url}
-                      href={paper.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-pad"
-                      style={{
-                        display: 'inline-flex', alignItems: 'center', gap: 8,
-                        borderRadius: 10, fontSize: '0.85rem', fontWeight: 600,
-                        border: '1px solid var(--border-color)', color: 'var(--text-secondary)',
-                      }}
-                    >
-                      <FileText size={14} /> {paper.label}
+                    <a key={paper.url} href={paper.url} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                      <FileText size={16} /> {paper.label}
                     </a>
                   ))}
                 </div>
@@ -143,92 +124,86 @@ export default function ProjectDetail() {
           </div>
         </section>
 
-        {/* Body */}
-        <section style={{ position: 'relative', zIndex: 10, paddingBottom: 80 }}>
-          <div className="page-container" style={{ maxWidth: 780 }}>
+        <section style={{ position: 'relative', zIndex: 10, paddingBottom: 110 }}>
+          <div className="page-container" style={{ maxWidth: 860 }}>
             {detail && (
               <>
-                <motion.div {...fadeUp(0.1)} style={{ marginTop: 20 }}>
-                  <h2 className="text-section mb-lg">Overview</h2>
-                  <p className="text-body" style={{ color: 'var(--text-secondary)', lineHeight: 1.9 }}>
-                    {detail.overview}
-                  </p>
-                </motion.div>
+                <FadeIn>
+                  <div style={{ marginTop: 30 }}>
+                    <p className="eyebrow" style={{ marginBottom: 14 }}>Overview</p>
+                    <Rule style={{ marginBottom: 26 }} />
+                    <p className="text-body" style={{ color: 'var(--silver)', lineHeight: 2 }}>
+                      {detail.overview}
+                    </p>
+                  </div>
+                </FadeIn>
 
                 {detail.highlights?.length > 0 && (
-                  <motion.div {...fadeUp(0.2)} style={{ marginTop: 44 }}>
-                    <h2 className="text-section mb-lg">Highlights</h2>
-                    <ul style={{ listStyle: 'none' }}>
-                      {detail.highlights.map((item, i) => (
-                        <li
-                          key={i}
-                          style={{
-                            display: 'flex', gap: 14, alignItems: 'flex-start', padding: '13px 0',
-                            borderBottom: i < detail.highlights.length - 1 ? '1px solid var(--border-color)' : 'none',
-                          }}
-                        >
-                          <span
-                            className="mono text-tiny"
-                            style={{ flexShrink: 0, color: A, opacity: 0.7, paddingTop: 3, width: 22 }}
+                  <FadeIn delay={0.06}>
+                    <div style={{ marginTop: 62 }}>
+                      <p className="eyebrow" style={{ marginBottom: 14 }}>What it does</p>
+                      <Rule style={{ marginBottom: 10 }} />
+                      <ul style={{ listStyle: 'none' }}>
+                        {detail.highlights.map((item, i) => (
+                          <li
+                            key={i}
+                            style={{
+                              display: 'flex', gap: 18, alignItems: 'flex-start',
+                              padding: '18px 0', borderBottom: '1px solid var(--line)',
+                            }}
                           >
-                            {String(i + 1).padStart(2, '0')}
-                          </span>
-                          <span className="text-body" style={{ color: 'var(--text-secondary)', lineHeight: 1.75 }}>
-                            {item}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </motion.div>
+                            <span className="mono text-tiny" style={{ flexShrink: 0, color: 'var(--silver-mute)', paddingTop: 5 }}>
+                              {String(i + 1).padStart(2, '0')}
+                            </span>
+                            <span className="text-body" style={{ color: 'var(--silver)', lineHeight: 1.8 }}>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </FadeIn>
                 )}
 
                 {detail.role && (
-                  <motion.div {...fadeUp(0.3)} style={{ marginTop: 44 }}>
-                    <h2 className="text-section mb-lg">My Role</h2>
-                    <p className="text-body" style={{ color: 'var(--text-secondary)', lineHeight: 1.9 }}>
-                      {detail.role}
-                    </p>
-                  </motion.div>
+                  <FadeIn delay={0.06}>
+                    <div style={{ marginTop: 62 }}>
+                      <p className="eyebrow" style={{ marginBottom: 14 }}>My role</p>
+                      <Rule style={{ marginBottom: 26 }} />
+                      <p className="text-body" style={{ color: 'var(--silver)', lineHeight: 2 }}>{detail.role}</p>
+                    </div>
+                  </FadeIn>
                 )}
               </>
             )}
 
-            {/* Prev / next */}
-            <motion.div
-              {...fadeUp(0.4)}
-              style={{
-                display: 'flex', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap',
-                marginTop: 64, paddingTop: 28, borderTop: '1px solid var(--border-color)',
-              }}
-            >
-              {prev ? (
-                <Link
-                  to={`/projects/${toSlug(prev.title)}`}
-                  style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--text-secondary)' }}
-                >
-                  <ArrowLeft size={15} />
-                  <span>
-                    <span className="mono text-tiny" style={{ display: 'block', color: 'var(--text-dim)' }}>PREVIOUS</span>
-                    <span className="text-small" style={{ fontWeight: 500 }}>{prev.title}</span>
-                  </span>
-                </Link>
-              ) : <span />}
+            {/* prev / next */}
+            <FadeIn delay={0.06}>
+              <div className="prevnext">
+                {prev ? (
+                  <Link to={`/projects/${toSlug(prev.title)}`} className="card card-pad" style={{ display: 'block' }}>
+                    <span className="eyebrow" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                      <ArrowLeft size={13} /> Previous
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.08rem', fontWeight: 600 }}>{prev.title}</span>
+                  </Link>
+                ) : <span />}
 
-              {next ? (
-                <Link
-                  to={`/projects/${toSlug(next.title)}`}
-                  style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'var(--text-secondary)', textAlign: 'right', marginLeft: 'auto' }}
-                >
-                  <span>
-                    <span className="mono text-tiny" style={{ display: 'block', color: 'var(--text-dim)' }}>NEXT</span>
-                    <span className="text-small" style={{ fontWeight: 500 }}>{next.title}</span>
-                  </span>
-                  <ArrowRight size={15} />
-                </Link>
-              ) : <span />}
-            </motion.div>
+                {next ? (
+                  <Link to={`/projects/${toSlug(next.title)}`} className="card card-pad" style={{ display: 'block', textAlign: 'right' }}>
+                    <span className="eyebrow" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, justifyContent: 'flex-end' }}>
+                      Next <ArrowRight size={13} />
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.08rem', fontWeight: 600 }}>{next.title}</span>
+                  </Link>
+                ) : <span />}
+              </div>
+            </FadeIn>
           </div>
         </section>
+
+        <style>{`
+          .prevnext { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 78px; }
+          @media (min-width: 640px) { .prevnext { grid-template-columns: 1fr 1fr; } }
+        `}</style>
       </div>
     </PageTransition>
   );
