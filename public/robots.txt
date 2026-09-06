@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://personalwebsite-amber-six.vercel.app/sitemap.xml
+Sitemap: https://will-roche-website.vercel.app/sitemap.xml
