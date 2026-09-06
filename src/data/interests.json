@@ -3,12 +3,12 @@
   "items": [
     { "name": "Cooking", "note": "I used to be really bad at it..." },
     { "name": "Freshwater Fishing", "note": "I like going for trout and landlocked salmon best" },
-    { "name": "Hiking", "note": "I got into it almost a year ago, really enjoying it! (good trails in ny)" },
-    { "name": "Lord of the Rings", "note": "Extended editions. It's not a debate." },
-    { "name": "Minecraft", "note": "Redstone is just embedded systems with more zombies." },
-    { "name": "Shrimpkeeping", "note": "A planted tank is a control system you can watch." },
-    { "name": "Soccer", "note": "Still playing, still arguing about the offside rule." },
-    { "name": "Stock Trading", "note": "Where a lot of my project ideas come from." },
-    { "name": "Weightlifting", "note": "Progressive overload is a good mental model for most things." }
+    { "name": "Hiking", "note": "I got into it almost a year ago, really enjoying it! (good trails in NY)" },
+    { "name": "Lord of the Rings", "note": "I started with the books as a kid, but the movies are good too" },
+    { "name": "Shrimpkeeping", "note": "Genuinely the greatest hobby" },
+    { "name": "Soccer", "note": "I played from middle school through my first 2 years of college (pre-transfer)" },
+    { "name": "Stock Trading", "note": "I have fun with it (in addition to retirement accounts)" },
+    { "name": "Video Games", "note": "Minecraft, Valorant, Fortnite (I know), and Pokemon" },
+    { "name": "Weightlifting", "note": "Started in late high school, still going strong" }
   ]
 }
