@@ -1,6 +1,7 @@
-# williamroche.dev
+# William Roche — personal site
 
-Personal site — React + Vite, Tailwind v4, Framer Motion, React Router.
+React + Vite, Tailwind v4, Framer Motion, React Router.
+Deployed on Vercel at `personalwebsite-amber-six.vercel.app`.
 
 ## Running it
 
