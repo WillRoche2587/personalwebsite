@@ -59,7 +59,7 @@ export default function ProjectCard({ project, number, delay = 0 }) {
           onMouseLeave={() => setHover(false)}
           onFocus={() => setHover(true)}
           onBlur={() => setHover(false)}
-          aria-label={`${project.title}${project.context ? `, ${project.context}` : ''} — open project`}
+          aria-label={`${project.title}${project.context ? `, ${project.context}` : ''}. Open project`}
         >
           {/* light sweeping across the face */}
           <motion.div

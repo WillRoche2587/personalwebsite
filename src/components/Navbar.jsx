@@ -57,7 +57,7 @@ export default function Navbar() {
         className="page-container"
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 76 }}
       >
-        <NavLink to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }} aria-label={`${personal.name} — home`}>
+        <NavLink to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: 12 }} aria-label={`${personal.name}, home`}>
           <svg width="24" height="24" viewBox="-12 -12 24 24" aria-hidden="true">
             <motion.circle
               r="9" fill="none" stroke="currentColor" strokeWidth="1" strokeOpacity="0.4" strokeDasharray="2 5"

@@ -86,7 +86,7 @@ function ContactForm() {
       </button>
 
       <p aria-live="polite" className="text-small" style={{ marginTop: 16, color: 'var(--silver-mute)', minHeight: '1.3em' }}>
-        {status === 'success' && "Got it — I'll get back to you soon."}
+        {status === 'success' && "Got it. I'll get back to you soon."}
         {status === 'error' && (
           <>Something went wrong. Email me directly at{' '}
             <a href={`mailto:${personal.email}`} className="link-wipe" style={{ color: 'var(--silver-bright)' }}>{personal.email}</a>.

@@ -15,7 +15,7 @@
       "description": "A real-time market tracker that streams quotes over WebSockets and charts them across four timeframes.",
       "link": "https://stocktracker-z7er.onrender.com",
       "detail": {
-        "overview": "A live price tracker built around a FastAPI backend that pushes updates over WebSockets instead of making the client poll. It handles the unglamorous parts of market data too — knowing when the market is actually open, and rendering the same instrument across four different time horizons without refetching everything.",
+        "overview": "A live price tracker built around a FastAPI backend that pushes updates over WebSockets instead of making the client poll. It handles the unglamorous parts of market data too: knowing when the market is actually open, and rendering the same instrument across four different time horizons without refetching everything.",
         "highlights": [
           "FastAPI backend streaming quotes over WebSocket connections",
           "1D / 1W / 1M / 1Y timeframe analysis on the same instrument",
@@ -23,7 +23,7 @@
           "Interactive price visualizations rendered with Chart.js",
           "Containerized with Docker for reproducible deployment"
         ],
-        "role": "Built end to end — backend streaming layer, market session logic, frontend charting, and deployment."
+        "role": "Built end to end: backend streaming layer, market session logic, frontend charting, and deployment."
       }
     },
     {
@@ -37,12 +37,12 @@
       "description": "A Unix-like shell written in C supporting command history, piping, I/O redirection, and background execution.",
       "link": "https://github.com/WillRoche2587/linuxShell",
       "detail": {
-        "overview": "A shell built from the system calls up. It parses a command line, forks, wires up file descriptors, and gets out of the way — which sounds simple until you handle a three-stage pipe with a redirect on the tail. Writing this is the fastest way I know to stop treating the shell as magic.",
+        "overview": "A shell built from the system calls up. It parses a command line, forks, wires up file descriptors, and gets out of the way, which sounds simple until you handle a three-stage pipe with a redirect on the tail. Writing this is the fastest way I know to stop treating the shell as magic.",
         "highlights": [
           "Designed a Unix-like shell supporting command history, piping, I/O redirection, process execution, and Linux commands",
           "Implemented process management, directory management, and IPC with system calls (fork, execvp, pipe, chdir)"
         ],
-        "role": "Sole author — parser, process management, IPC, and built-in command implementations."
+        "role": "Sole author: parser, process management, IPC, and built-in command implementations."
       }
     },
     {
@@ -60,7 +60,7 @@
       "description": "An AI-powered song recommendation platform that turns a prompt into a playlist.",
       "link": "https://songify-wjr.vercel.app",
       "detail": {
-        "overview": "Songify takes what you're in the mood for and returns music that fits, using the Cohere API to do the interpretation. It was my first real exercise in designing around a language model rather than bolting one on — the interesting work is in the prompt boundary and in what you do when the model returns something unusable.",
+        "overview": "Songify takes what you're in the mood for and returns music that fits, using the Cohere API to do the interpretation. It was my first real exercise in designing around a language model rather than bolting one on. The interesting work is in the prompt boundary and in what you do when the model returns something unusable.",
         "highlights": [
           "Cohere API for recommendation generation from natural language input",
           "TMDB API integration for supplementary media context",
@@ -68,7 +68,7 @@
           "Styled with Tailwind CSS",
           "Deployed on Vercel"
         ],
-        "role": "Built end to end — frontend, API routes, model integration, and deployment."
+        "role": "Built end to end: frontend, API routes, model integration, and deployment."
       }
     },
     {
@@ -85,12 +85,12 @@
       ],
       "description": "A portfolio tax tracker with a FIFO cost-basis engine, wash sale detection, and short/long-term liability estimation.",
       "detail": {
-        "overview": "Gainsight answers a question brokerages make surprisingly hard: what do I actually owe? It implements a FIFO cost-basis engine that matches sales against lots in order, detects wash sales, and — importantly — doesn't just flag the disallowed loss but rolls it forward into the replacement lot's basis, which is where most naive implementations get it wrong. The output is a short-term and long-term liability estimate you can trust enough to plan against.",
+        "overview": "Gainsight answers a question brokerages make surprisingly hard: what do I actually owe? It implements a FIFO cost-basis engine that matches sales against lots in order and detects wash sales. Importantly, it doesn't just flag the disallowed loss but rolls it forward into the replacement lot's basis, which is where most naive implementations get it wrong. The output is a short-term and long-term liability estimate you can trust enough to plan against.",
         "highlights": [
           "Devised a FIFO tax engine with wash sale detection, rolling disallowed losses into a short/long-term tax liability estimate",
           "Architected 5 custom exception classes mapped to HTTP status codes via a global handler, backed by a JUnit test suite"
         ],
-        "role": "Backend architecture and tax logic — the FIFO engine, wash sale rules, exception design, and test suite."
+        "role": "Backend architecture and tax logic: the FIFO engine, wash sale rules, exception design, and test suite."
       }
     },
     {
@@ -109,10 +109,10 @@
       "description": "A multi-agent planning platform that scores a charitable event before it happens, folding weather, calendar conflicts, and historical patterns into one readiness number.",
       "link": "https://github.com/WillRoche2587/ImpactGauge-HopHacks2025",
       "detail": {
-        "overview": "Nonprofits pick event dates on instinct and find out afterward whether it was a good one. ImpactGauge tries to answer that question in advance by running four specialized agents over the same event — weather, competing local events, historical turnout patterns — and then a fifth that aggregates their output into a single readiness score with the reasoning attached. The design decision that mattered was making every agent return the same shape: summary, findings, recommendations, risks, opportunities, and a confidence number. Once the contract is fixed, the scoring agent doesn't care which agent produced what, and a failing agent degrades the score instead of breaking the request.",
+        "overview": "Nonprofits pick event dates on instinct and find out afterward whether it was a good one. ImpactGauge tries to answer that question in advance by running four specialized agents over the same event (weather, competing local events, historical turnout patterns) and then a fifth that aggregates their output into a single readiness score with the reasoning attached. The design decision that mattered was making every agent return the same shape: summary, findings, recommendations, risks, opportunities, and a confidence number. Once the contract is fixed, the scoring agent doesn't care which agent produced what, and a failing agent degrades the score instead of breaking the request.",
         "highlights": [
           "Five specialized Gemini agents behind a single validated API route",
-          "Standardized agent response contract — findings, recommendations, risks, opportunities, and a confidence score",
+          "Standardized agent response contract: findings, recommendations, risks, opportunities, and a confidence score",
           "Scoring agent aggregates the other analyses into one event readiness rating",
           "OpenWeatherMap geocoding and forecast, matched to the window closest to the event date",
           "Per-agent fallback analysis so a missing key or a failed upstream call degrades instead of erroring out",
@@ -134,12 +134,12 @@
       ],
       "description": "A volunteer management platform built for a nonprofit, with an admin analytics dashboard and a context-aware AI assistant.",
       "detail": {
-        "overview": "Built at Morgan Stanley's Code to Give 2026 for a nonprofit that needed to understand its own volunteer base. I built the admin side — the analytics dashboard that turns raw signups into a picture of who shows up and to what — plus an AI support assistant that answers using the asking user's actual profile and event history instead of generic help text.",
+        "overview": "Built at Morgan Stanley's Code to Give 2026 for a nonprofit that needed to understand its own volunteer base. I built the admin side: the analytics dashboard that turns raw signups into a picture of who shows up and to what, plus an AI support assistant that answers using the asking user's actual profile and event history instead of generic help text.",
         "highlights": [
           "Built an admin analytics dashboard to track volunteer activity, event participation, and platform-wide engagement metrics",
           "Developed a context-aware AI assistant that personalized support responses based on each user's profile and event data"
         ],
-        "role": "Admin dashboard and AI assistant — analytics queries, dashboard UI, and the assistant's context pipeline."
+        "role": "Admin dashboard and AI assistant: analytics queries, dashboard UI, and the assistant's context pipeline."
       }
     },
     {
@@ -158,12 +158,12 @@
       ],
       "description": "An internal risk assessment tool for banks that profiles loan applicants from public records and social media.",
       "detail": {
-        "overview": "RiskRadar gives a credit team the picture of an applicant that exists in public but nobody has time to assemble. The hard part wasn't the analysis — it was throughput. A naive scraper covering this many sources takes hours; we parallelized collection into six async waves so the whole profile lands inside a coffee break.",
+        "overview": "RiskRadar gives a credit team the picture of an applicant that exists in public but nobody has time to assemble. The hard part wasn't the analysis. It was throughput. A naive scraper covering this many sources takes hours; we parallelized collection into six async waves so the whole profile lands inside a coffee break.",
         "highlights": [
           "Created an internal risk assessment tool for banks, leveraging public records and social media to profile loan applicants",
           "Gathered data from 400+ platforms in 15 minutes through a parallelized OSINT pipeline running across 6 async waves"
         ],
-        "role": "Data pipeline and analysis — the parallelized collection architecture and the profiling logic on top of it."
+        "role": "Data pipeline and analysis: the parallelized collection architecture and the profiling logic on top of it."
       }
     }
   ]
