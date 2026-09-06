@@ -2,6 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ExternalLink, FileText } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
+import useTitle from '../lib/useTitle';
 import { Atmosphere, Reveal, Rule, FadeIn, EASE } from '../components/Motion';
 import { toSlug } from '../lib/slug';
 import data from '../data/projects.json';
@@ -12,6 +13,8 @@ export default function ProjectDetail() {
   const { slug } = useParams();
   const index = projects.findIndex(p => toSlug(p.title) === slug);
   const project = projects[index];
+
+  useTitle(project ? project.title : 'Project not found');
 
   if (!project) {
     return (

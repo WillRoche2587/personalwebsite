@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight, FileText, Mail } from 'lucide-react';
 import { GitHubIcon } from '../components/SocialIcons';
 import PageTransition from '../components/PageTransition';
 import ProjectCard from '../components/ProjectCard';
+import useTitle from '../lib/useTitle';
 import { Atmosphere, Reveal, Rule, Section, FadeIn, EASE } from '../components/Motion';
 import personal from '../data/personal.json';
 import skills from '../data/skills.json';
@@ -191,6 +192,7 @@ function Job({ item, index }) {
 }
 
 export default function Home() {
+  useTitle();
   return (
     <PageTransition>
       <div style={{ minHeight: '100vh', position: 'relative' }}>

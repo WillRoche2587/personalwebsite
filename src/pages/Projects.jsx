@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
 import ProjectCard from '../components/ProjectCard';
+import useTitle from '../lib/useTitle';
 import { Atmosphere, Reveal, Rule, EASE } from '../components/Motion';
 import data from '../data/projects.json';
 
 const projects = data.featured;
 
 export default function Projects() {
+  useTitle('Projects');
   return (
     <PageTransition>
       <div style={{ minHeight: '100vh', position: 'relative' }}>

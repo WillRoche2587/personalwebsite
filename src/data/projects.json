@@ -97,7 +97,7 @@
       "title": "ImpactGauge",
       "code": "GAUG",
       "period": "Sept 2025",
-      "context": "HopHacks 2026",
+      "context": "HopHacks",
       "tools": [
         "Next.js",
         "TypeScript",
@@ -125,7 +125,7 @@
       "title": "LemonLink",
       "code": "LMNK",
       "period": "2026",
-      "context": "Morgan Stanley Code To Give 2026",
+      "context": "Morgan Stanley Code To Give",
       "tools": [
         "Next.js",
         "FastAPI",
@@ -146,7 +146,7 @@
       "title": "RiskRadar",
       "code": "RSKR",
       "period": "2026",
-      "context": "CMU TartanHacks 2026",
+      "context": "CMU TartanHacks",
       "tools": [
         "Pandas",
         "NumPy",

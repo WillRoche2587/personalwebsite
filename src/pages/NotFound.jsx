@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
+import useTitle from '../lib/useTitle';
 import { Atmosphere, Reveal, Rule, EASE } from '../components/Motion';
 
 export default function NotFound() {
+  useTitle('Page not found');
   return (
     <PageTransition>
       <div style={{ minHeight: '100vh', position: 'relative' }}>

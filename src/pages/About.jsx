@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Send, Check, AlertCircle, Mail, MapPin, Phone, GraduationCap } from 'lucide-react';
 import { GitHubIcon, LinkedInIcon, EmailIcon } from '../components/SocialIcons';
 import PageTransition from '../components/PageTransition';
+import useTitle from '../lib/useTitle';
 import { Atmosphere, Reveal, Rule, Section, FadeIn, EASE } from '../components/Motion';
 import personal from '../data/personal.json';
 import interests from '../data/interests.json';
@@ -60,12 +61,13 @@ function ContactForm() {
   return (
     <form onSubmit={handleSubmit}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginBottom: 14 }}>
-        <input type="text" name="name" placeholder="Your name" required className="input-field" />
-        <input type="email" name="email" placeholder="Your email" required className="input-field" />
+        <input type="text" name="name" placeholder="Your name" aria-label="Your name" required className="input-field" />
+        <input type="email" name="email" placeholder="Your email" aria-label="Your email" required className="input-field" />
       </div>
       <textarea
         name="message"
         placeholder="Your message"
+        aria-label="Your message"
         rows={6}
         required
         className="input-field"
@@ -96,6 +98,7 @@ function ContactForm() {
 }
 
 export default function About() {
+  useTitle('About');
   const contactRows = [
     { Icon: Mail, label: 'Email', value: personal.email, href: `mailto:${personal.email}` },
     { Icon: GraduationCap, label: 'School', value: personal.schoolEmail, href: `mailto:${personal.schoolEmail}` },

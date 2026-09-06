@@ -16,7 +16,10 @@
   --silver-bright: #f0f1f4;
   --silver: #b8bcc6;
   --silver-dim: #838893;
-  --silver-mute: #52565f;
+  /* lightened from #52565f (2.9:1 on black — failed WCAG AA even for large
+     text) to clear AA for body text: context labels, job locations, form
+     status messages and the footer line all use this token */
+  --silver-mute: #767b85;
 
   --line: #191b21;
   --line-bright: #262931;

@@ -23,14 +23,17 @@ src/
     skills.json      toolkit categories
     interests.json   the "off the clock" grid
   components/
-    ProjectCard.jsx  the whole-card project link, and the 3D tilt interaction
+    ProjectCard.jsx  the whole-card project link, and the shear/hover interaction
     Motion.jsx       shared motion + atmosphere (see below)
     Navbar, Footer, PageTransition, ScrollToTop, SocialIcons
   pages/           Home, Projects, ProjectDetail, About, NotFound
-  lib/slug.js      title -> URL slug, shared by Projects and ProjectDetail
+  lib/
+    slug.js          title -> URL slug, shared by Projects and ProjectDetail
+    useTitle.js      per-route <title>
+    useMediaQuery.js React-subscribable media query
 public/
   resume.pdf       linked from the navbar and hero
-  papers/          project write-ups
+  robots.txt, sitemap.xml
 ```
 
 ## Editing content
@@ -38,30 +41,31 @@ public/
 Almost everything is data-driven. To change what the site says, edit the JSON in
 `src/data/` — no component changes needed.
 
-**Adding a project** — append to `featured` in `projects.json`. Order matters: the
-array runs oldest → newest, left to right on the chart. Each project needs:
+**Adding a project** — append to `featured` in `projects.json` (the array holds
+every project; the homepage picks three from it, see below). Each project needs:
 
 | field | required | notes |
 | --- | --- | --- |
 | `title` | yes | also generates the URL slug |
-| `code` | yes | 4 letters, uppercase — the body's label on the star chart |
+| `code` | yes | 4 letters, uppercase — the key `FEATURED_CODES` pins the homepage set by |
 | `period` | yes | display string, e.g. `"Feb 2025"` |
 | `context` | no | subtitle, e.g. `"CMU TartanHacks"` |
 | `tools` | yes | array of tag strings |
 | `description` | yes | one or two sentences |
 | `link` | no | live site or repo |
-| `papers` | no | `[{ label, url }]`, files live in `public/papers/` |
+| `papers` | no | `[{ label, url }]`; drop the file in `public/` and point `url` at it |
 | `detail` | no | `{ overview, highlights[], role }` — powers the detail page |
 
 ## Projects
 
-Every project card shares one signature interaction
-(`src/components/ProjectCard.jsx`): the card tilts in 3D toward the
-cursor, a sheen tracks the pointer across its surface, and the layers
-inside move at different depths so there's real parallax rather than a
-flat hover state. It is deliberately identical on every card — the
-animation is about how the card feels, not a claim about what the
-project is.
+Every project card shares one interaction (`src/components/ProjectCard.jsx`):
+at rest the tiles are parallelograms, all sheared by the same angle so their
+slanted edges nest flush and the row reads as one continuous band. Hovering
+snaps that one card square, lifts it out of the band, and runs a diagonal
+light sweep across it — so the tile you're reading is always the upright,
+undistorted one. Content is counter-sheared so type is never skewed. Below
+the 2-column breakpoint the tiles stack and the shear is dropped (a leaning
+single-column card just looks broken, and touch has no hover to fix it).
 
 The whole card is the link, so there's no small "read more" target to
 hunt for. Each card shows where the project came from (its `context`)
@@ -70,9 +74,9 @@ above the title. `context` is the event name for hackathon projects and
 "Software Engineering Internship" because it was paid work, not a
 personal project.
 
-Featured projects on the homepage are pinned by code in
-`FEATURED_CODES` (`src/pages/Home.jsx`) rather than by array position,
-so reordering `projects.json` can't silently change them.
+The homepage features three projects, pinned by `code` in `FEATURED_CODES`
+(`src/pages/Home.jsx`) rather than by array position, so reordering
+`projects.json` can't silently change them.
 
 ## Structure of the visuals
 

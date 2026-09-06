@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { EASE } from './Motion';
 import { toSlug } from '../lib/slug';
+import useMediaQuery from '../lib/useMediaQuery';
 
 /* ═══════════════════════════════════════════════════════════════
    The card *is* the graphic.
@@ -20,12 +21,19 @@ import { toSlug } from '../lib/slug';
 
    Content is counter-sheared so type is never skewed, at rest or
    in motion.
+
+   The shear only makes sense when the tiles sit in a row and their
+   edges can nest. Below the 2-column breakpoint they stack, so the
+   shear is dropped — a leaning single-column card just reads as
+   broken, and there's no hover on touch to straighten it.
    ═══════════════════════════════════════════════════════════════ */
 
 const SKEW = -7;
 
 export default function ProjectCard({ project, number, delay = 0 }) {
   const [hover, setHover] = useState(false);
+  const sheared = useMediaQuery('(min-width: 720px)');
+  const skew = sheared ? SKEW : 0;
 
   return (
     <motion.div
@@ -37,7 +45,7 @@ export default function ProjectCard({ project, number, delay = 0 }) {
     >
       <motion.div
         animate={{
-          skewX: hover ? 0 : SKEW,
+          skewX: hover ? 0 : skew,
           scale: hover ? 1.035 : 1,
           y: hover ? -8 : 0,
         }}
@@ -90,7 +98,7 @@ export default function ProjectCard({ project, number, delay = 0 }) {
           />
 
           {/* content, un-sheared so type stays upright */}
-          <div className="tile-inner" style={{ transform: `skewX(${-SKEW}deg)` }}>
+          <div className="tile-inner" style={{ transform: `skewX(${-skew}deg)` }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
               {/* the index carries the upper half of the tile — a graphic,
                   not a caption, so the space isn't dead */}
@@ -117,7 +125,10 @@ export default function ProjectCard({ project, number, delay = 0 }) {
               </motion.div>
             </div>
 
-            <div style={{ marginTop: 'auto' }}>
+            {/* fixed gap so the number-to-text distance is identical on every
+                card in the band — leftover height collects below the tags,
+                where a ragged edge doesn't read as a hole */}
+            <div style={{ marginTop: 52 }}>
               {project.context && (
                 <p
                   className="eyebrow"
