@@ -297,7 +297,7 @@ export default function Home() {
         <section className="section" style={{ position: 'relative', zIndex: 10, paddingTop: 104 }}>
           <div className="page-container">
             <Section number="01" title="Selected Projects" id="work">
-              A few favourites. Click through for the full story.
+              A few favorites. Click through for the full story.
             </Section>
 
             <div className="tile-band"><div className="grid-projects">
